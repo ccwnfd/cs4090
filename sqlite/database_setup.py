@@ -7,3 +7,5 @@ cur = con.cursor()
 res = cur.execute("SELECT name FROM sqlite_master")
 
 print(res.fetchone())
+
+# setup poetry
