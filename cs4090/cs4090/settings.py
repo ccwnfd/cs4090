@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'webApp',
     'accounts',
+
+    "calendarapp.apps.CalendarappConfig",
+    #"accounts.apps.AccountsConfig",
 ]
 
 MIDDLEWARE = [
