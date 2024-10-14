@@ -9,28 +9,33 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('webApp', '0001_initial'),
+        ("webApp", "0001_initial"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='userstreak',
-            old_name='streak',
-            new_name='current_streak',
+            model_name="userstreak",
+            old_name="streak",
+            new_name="current_streak",
         ),
         migrations.RenameField(
-            model_name='userstreak',
-            old_name='last_date',
-            new_name='last_activity_date',
+            model_name="userstreak",
+            old_name="last_date",
+            new_name="last_activity_date",
         ),
         migrations.RemoveField(
-            model_name='userstreak',
-            name='user_id',
+            model_name="userstreak",
+            name="user_id",
         ),
         migrations.AddField(
-            model_name='userstreak',
-            name='user',
-            field=models.OneToOneField(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='streak', to=settings.AUTH_USER_MODEL),
+            model_name="userstreak",
+            name="user",
+            field=models.OneToOneField(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="streak",
+                to=settings.AUTH_USER_MODEL,
+            ),
             preserve_default=False,
         ),
     ]

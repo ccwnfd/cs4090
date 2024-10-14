@@ -5,7 +5,7 @@ from accounts.forms import SignUpForm
 
 
 class SignUpView(View):
-    """ User registration view """
+    """User registration view"""
 
     template_name = "accounts/signup.html"
     form_class = SignUpForm

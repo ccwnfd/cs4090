@@ -7,7 +7,7 @@ from accounts.models import User
 
 
 class EventManager(models.Manager):
-    """ Event manager """
+    """Event manager"""
 
     def get_all_events(self, user):
         events = Event.objects.filter(user=user, is_active=True, is_deleted=False)
@@ -24,7 +24,7 @@ class EventManager(models.Manager):
 
 
 class Event(EventAbstract):
-    """ Event model """
+    """Event model"""
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="events")
     title = models.CharField(max_length=200)
