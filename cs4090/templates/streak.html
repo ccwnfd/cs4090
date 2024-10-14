@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streak Notification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .streak {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: #ffcc00; /* Change color as needed */
+            color: #000; /* Change text color as needed */
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000; /* Ensure it stays on top */
+        }
+        .content {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="streak">
+        {% if streak == 0 %}
+            Your streak has been broken! It's back to zero.
+        {% else %}
+            Your current streak is {{ streak }} day(s)!
+        {% endif %}
+        Last continued on: {{ last_date }}
+    </div>
+    
+    <div class="content">
+        <h1>Welcome to the Streak Page</h1>
+        <p>Your main content goes here.</p>
+    </div>
+</body>
+</html>
