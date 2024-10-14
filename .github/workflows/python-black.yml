@@ -1,9 +1,9 @@
-name: Lint with Black
+name: Black Autoformatting
 
 on: [push, pull_request]
 
 jobs:
-  lint:
+  black-autoformatting:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
