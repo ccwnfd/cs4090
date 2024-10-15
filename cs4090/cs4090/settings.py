@@ -42,8 +42,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "webApp",
-    "accounts",
     "calendarapp.apps.CalendarappConfig", 
     "accounts.apps.AccountsConfig",
     "webApp.apps.WebappConfig"

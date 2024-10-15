@@ -3,7 +3,7 @@ from django.db import models
 from django.urls import reverse
 
 from calendarapp.models import EventAbstract
-from accounts.models import User
+from accounts.models.user import User
 
 
 class EventManager(models.Manager):

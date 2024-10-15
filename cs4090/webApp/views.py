@@ -4,8 +4,8 @@ from django.shortcuts import render, get_object_or_404
 from django.conf import settings
 from django.views.generic import TemplateView
 from django.utils import timezone
-from cs4090.accounts.models.streak import UserStreak
-from cs4090.accounts.models.user import User  # Import your custom User model
+from .models import UserStreak
+from accounts.models.user import User
 
 
 def index(request):
