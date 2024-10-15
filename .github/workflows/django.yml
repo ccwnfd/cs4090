@@ -27,4 +27,5 @@ jobs:
         pip install -r requirements.txt
     - name: Run Tests
       run: |
-        python ./cs4090/manage.py test
+        cd ./cs4090/
+        python manage.py test
