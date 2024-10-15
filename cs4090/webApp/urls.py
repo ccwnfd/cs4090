@@ -9,3 +9,4 @@ urlpatterns = [  # standard method for keeping track of urls.
     # path('calendar/', views.index1.as_view(), name='calendar'),
     path("streak/", streak_view, name="streak_view"),
 ]
+

@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "cs4090project"
+name = "cs4090"
 version = "0.1.0"
 description = ""
 authors = ["Cade Wilkerson <ccwnfd@umsytem.edu>"]
