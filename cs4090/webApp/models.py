@@ -7,7 +7,7 @@ from django.conf import settings
 class index1(TemplateView):
     template_name = "calendar.html"
 
-
+"""
 class UserStreak(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="streak"
@@ -17,3 +17,4 @@ class UserStreak(models.Model):
     
     def __str__(self):
         return f"User {self.user.email}: Streak {self.current_streak} (Last date: {self.last_activity_date})"
+"""
