@@ -8,17 +8,24 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='UserStreak',
+            name="UserStreak",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('user_id', models.PositiveIntegerField(unique=True)),
-                ('streak', models.PositiveIntegerField(default=0)),
-                ('last_date', models.DateField(default=django.utils.timezone.now)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("user_id", models.PositiveIntegerField(unique=True)),
+                ("streak", models.PositiveIntegerField(default=0)),
+                ("last_date", models.DateField(default=django.utils.timezone.now)),
             ],
         ),
     ]

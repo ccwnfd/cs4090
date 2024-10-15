@@ -6,7 +6,7 @@ from accounts.forms import SignInForm
 
 
 class SignInView(View):
-    """ User registration view """
+    """User registration view"""
 
     template_name = "accounts/signin.html"
     form_class = SignInForm
