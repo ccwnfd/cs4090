@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class UserManager(BaseUserManager):
-    """ User manager """
+    """User manager"""
 
     def _create_user(self, email, password=None, **extra_fields):
         """Creates and returns a new user using an email address"""
@@ -43,7 +43,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    """ Custom user model """
+    """Custom user model"""
 
     email = models.EmailField(
         _("Email Address"),

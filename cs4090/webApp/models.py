@@ -8,11 +8,10 @@ from django.conf import settings
 class index1(TemplateView):
     template_name = "calendar.html"
 
+
 class UserStreak(models.Model):
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='streak'
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="streak"
     )  # Directly referencing the User model
     current_streak = models.PositiveIntegerField(default=0)
     last_activity_date = models.DateField(default=timezone.now)

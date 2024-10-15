@@ -2,7 +2,7 @@ from django.db import models
 
 
 class EventAbstract(models.Model):
-    """ Event abstract model """
+    """Event abstract model"""
 
     is_active = models.BooleanField(default=True)
     is_deleted = models.BooleanField(default=False)

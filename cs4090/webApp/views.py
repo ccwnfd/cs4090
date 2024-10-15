@@ -1,14 +1,16 @@
-#from django.shortcuts import render'
+# from django.shortcuts import render'
 from django.http import HttpResponse
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.conf import settings
 from django.views.generic import TemplateView
 from django.utils import timezone
 from .models import UserStreak
 from accounts.models import User  # Import your custom User model
 
+
 def index(request):
-    return render(request, 'welcome.html')
+    return render(request, "welcome.html")
+
 
 def streak_view(request, email):
     today = timezone.now().date()  # This is already a date object
@@ -35,8 +37,8 @@ def streak_view(request, email):
     user_streak.save()
 
     context = {
-        'streak': user_streak.current_streak,
-        'last_activity_date': user_streak.last_activity_date,
+        "streak": user_streak.current_streak,
+        "last_activity_date": user_streak.last_activity_date,
     }
 
-    return render(request, 'streak.html', context)
+    return render(request, "streak.html", context)
