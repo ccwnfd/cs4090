@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
 
-from accounts.models import User
+from accounts.models.user import User
 
 
 class SignInForm(forms.Form):

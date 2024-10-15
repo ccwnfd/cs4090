@@ -32,6 +32,58 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "umsystem.edu"  # Change to your email provider
+EMAIL_PORT = 587  # Typically 587 for TLS
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "ccwnfd@umsystem.edu"
+EMAIL_HOST_PASSWORD = "fake@123"
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+ADMINS = [("Admin Name", "ccwnfd@umsystem.edu")]  # Set your admin email
+
+ABSOLUTE_URL_OVERRIDES = {
+    # 'yourapp.ModelName': 'http://example.com/your-custom-url/',  # Add your overrides here
+}
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, "locale"),  # Adjust the path as necessary
+]
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+        "mail_admins": {
+            "level": "ERROR",
+            "class": "django.utils.log.AdminEmailHandler",
+            "include_html": True,
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console", "mail_admins"],
+            "level": "ERROR",
+            "propagate": True,
+        },
+    },
+}
+
+LOGGING_CONFIG = "logging.config.dictConfig"
+DEFAULT_EXCEPTION_REPORTER = "django.views.debug.ExceptionReporter"
+DEFAULT_TABLESPACE = ""
+DEFAULT_INDEX_TABLESPACE = ""
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+SECURE_HSTS_SECONDS = 3600  # 1 hour
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Optional: apply HSTS to subdomains
+SECURE_HSTS_PRELOAD = True  # Optional: include your site in HSTS preload list
 
 # Application definition
 

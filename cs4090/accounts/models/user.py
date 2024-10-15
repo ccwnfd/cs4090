@@ -5,6 +5,7 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 
 
 class UserManager(BaseUserManager):
@@ -56,9 +57,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(_("Date Joined"), auto_now_add=True)
     last_updated = models.DateTimeField(_("Last Updated"), auto_now=True)
 
+    # Streak-related fields
+    current_streak = models.PositiveIntegerField(default=0)
+    last_activity_date = models.DateField(default=timezone.now)
+
     objects = UserManager()
 
     USERNAME_FIELD = "email"
 
     def __str__(self):
-        return self.email
+        return f"{self.email} - Streak: {self.current_streak} (Last activity: {self.last_activity_date})"
