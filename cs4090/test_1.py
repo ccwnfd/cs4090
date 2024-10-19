@@ -1,4 +1,3 @@
-
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
 from django.utils import timezone
@@ -11,9 +10,7 @@ class UserTestCase(TestCase):
         """Set up a user and streak for testing."""
         # Create a user using the custom User model's manager
         self.user = User.objects.create_user(
-            email='testuser@example.com',
-            password='Fake@1234',
-            is_active=True
+            email="testuser@example.com", password="Fake@1234", is_active=True
         )
         # Set up streak-related fields on the user (assumed integrated into the User model)
         self.user.current_streak = 100
@@ -22,21 +19,19 @@ class UserTestCase(TestCase):
 
     def test_user_creation(self):
         """Test that the user was created properly."""
-        user = User.objects.get(email='testuser@example.com')
-        self.assertEqual(user.email, 'testuser@example.com')
-        self.assertTrue(user.check_password('Fake@1234'))
+        user = User.objects.get(email="testuser@example.com")
+        self.assertEqual(user.email, "testuser@example.com")
+        self.assertTrue(user.check_password("Fake@1234"))
         self.assertEqual(user.current_streak, 100)
         self.assertEqual(user.last_activity_date, timezone.now().date())
 
     def test_streak_view(self):
-
-
         """Test the streak view for the created user."""
         # Simulate a logged-in user with RequestFactory
         factory = RequestFactory()
         path = reverse("streak_view")  # Ensure the name matches your URL pattern
         request = factory.get(path)
-        
+
         # Simulate the logged-in user
         request.user = self.user
 
