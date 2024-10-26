@@ -19,9 +19,11 @@ class SignUpView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.first_name = form.cleaned_data.get('first_name')
-            user.last_name = form.cleaned_data.get('last_name')
+            user.first_name = form.cleaned_data.get("first_name")
+            user.last_name = form.cleaned_data.get("last_name")
             user.save()
             return redirect("accounts:signin")
+
+        print("Form errors:", form.errors)
         context = {"form": form}
         return render(request, self.template_name, context)
