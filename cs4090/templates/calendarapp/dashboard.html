@@ -18,7 +18,7 @@
 <div class="row">
     <div class="col-md-6 col-lg-3">
         <div class="widget-small primary coloured-icon">
-            <i class="icon fa fa-files-o fa-3x"></i>
+            <i class="icon fa fa-files-o" style="font-size: 5em;"></i> <!--   I changed icon sizes -->
             <div class="info">
                 <h4>Total Completed Events</h4>
                 <p><b>{{ total_event }}</b></p>
@@ -27,7 +27,7 @@
     </div>
     <div class="col-md-6 col-lg-3">
         <div class="widget-small info coloured-icon">
-            <i class="icon fa fa-thumbs-o-up fa-3x"></i>
+            <i class="icon fa fa-thumbs-o-up fa-3x" style="font-size: 5em;"></i><!--   I changed icon sizes -->
             <div class="info">
                 <h4>Total Running Events</h4>
                 <p><b>{{ running_events.count }}</b></p>
@@ -36,7 +36,7 @@
     </div>
     <div class="col-md-6 col-lg-3">
         <div class="widget-small warning coloured-icon">
-            <i class="icon fa fa-users fa-3x"></i>
+            <i class="icon fa fa-users fa-3x" style="font-size: 5em;"></i><!--   I changed icon sizes -->
             <div class="info">
                 <h4>Total Participants</h4>
                 <p><b>10</b></p>
@@ -45,10 +45,19 @@
     </div>
     <div class="col-md-6 col-lg-3">
         <div class="widget-small danger coloured-icon">
-            <i class="icon fa fa-star fa-3x"></i>
+            <i class="icon" style="font-size: 3.37em;">🔥</i> <!-- icon change -->
             <div class="info">
-                <h4>Stars</h4>
-                <p><b>500</b></p>
+                <h4>Streak</h4>
+                <p><b>
+                    {% if streak == 0 %} <!-- added this for streak stuff -->
+                        Your streak has been broken! It's back to zero.
+                    {% else %}
+                        {{ streak }} day(s)!
+                        <br>Last continued on: {{ last_activity_date }}
+                    {% endif %}
+
+
+                </b></p>
             </div>
         </div>
     </div>
