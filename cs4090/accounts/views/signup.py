@@ -24,6 +24,5 @@ class SignUpView(View):
             user.save()
             return redirect("accounts:signin")
 
-        print("Form errors:", form.errors)
         context = {"form": form}
         return render(request, self.template_name, context)
