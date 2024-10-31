@@ -3,7 +3,7 @@
 {% block title %}Event Calendar{% endblock title %}
 
 {% block extracss %}
-  <link href="{% static 'calender/main.css' %}" rel="stylesheet" />
+  <link href="{% static 'calendar/main.css' %}" rel="stylesheet" />
 {% endblock extracss %}
 
 {% block breadcrumb %}
@@ -123,7 +123,7 @@
 
 
 {% block extrascripts %}
-<script src="{% static 'calender/main.js' %}"></script>
+<script src="{% static 'calendar/main.js' %}"></script>
 <script>
   function converterDataParaDjangoFormat(data) {
       const dataJS = new Date(data);

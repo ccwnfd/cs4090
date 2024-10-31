@@ -11,8 +11,6 @@ from django.utils import timezone
 class UserManager(BaseUserManager):
     """User manager"""
 
-    print("callled")
-
     def _create_user(
         self, email, password=None, first_name=None, last_name=None, **extra_fields
     ):
@@ -57,8 +55,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     """Custom user model"""
-
-    print("callled")
+    
     first_name = models.CharField(max_length=50, blank=True, null=True)
     last_name = models.CharField(max_length=50, blank=True, null=True)
     email = models.EmailField(
