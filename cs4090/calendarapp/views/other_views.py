@@ -99,7 +99,7 @@ def add_eventmember(request, event_id):
                 user = forms.cleaned_data["user"]
                 EventMember.objects.create(event=event, user=user)
                 return redirect("calendarapp:calendar")
-            else: # FIXME: is this condition necessary ?
+            else:  # FIXME: is this condition necessary ?
                 print("--------------User limit exceed!-----------------")
     context = {"form": forms}
     return render(request, "add_member.html", context)
