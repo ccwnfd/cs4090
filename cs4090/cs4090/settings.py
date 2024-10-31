@@ -97,6 +97,7 @@ INSTALLED_APPS = [
     "calendarapp.apps.CalendarappConfig",
     "accounts.apps.AccountsConfig",
     "webApp.apps.WebappConfig",
+    "courseApp.apps.WebappConfig",
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,19 @@
+<!-- create_class.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Course</title>
+</head>
+<body>
+    <h1>Create a New Course</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+    <br>
+    <a href="{% url 'course_list' %}">Back to Course List</a>
+</body>
+</html>
