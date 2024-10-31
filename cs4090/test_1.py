@@ -1,7 +1,7 @@
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
 from django.utils import timezone
-from classes.views import streak_view
+from webApp.views import streak_view
 from accounts.models.user import User
 
 
