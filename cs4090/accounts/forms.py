@@ -23,6 +23,11 @@ class SignUpForm(forms.ModelForm):
         required=True,
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
+    canvas_api_key = forms.CharField(
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
     password1 = forms.CharField(
         label="Password",
         widget=forms.PasswordInput(attrs={"class": "form-control"}),
@@ -36,7 +41,7 @@ class SignUpForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "email"]
+        fields = ["first_name", "last_name", "canvas_api_key", "email"]
         widgets = {"email": forms.EmailInput(attrs={"class": "form-control"})}
 
     def clean_password2(self):
@@ -50,6 +55,7 @@ class SignUpForm(forms.ModelForm):
         user = super().save(commit=False)
         user.first_name = self.cleaned_data.get("first_name")
         user.last_name = self.cleaned_data.get("last_name")
+        user.canvas_api_key = self.cleaned_data.get("canvas_api_key")
         user.set_password(self.cleaned_data["password1"])
         if commit:
             user.save()

@@ -21,6 +21,7 @@ class SignUpView(View):
             user = form.save(commit=False)
             user.first_name = form.cleaned_data.get("first_name")
             user.last_name = form.cleaned_data.get("last_name")
+            user.canvas_api_key = form.cleaned_data.get("canvas_api_key")
             user.save()
             return redirect("accounts:signin")
 

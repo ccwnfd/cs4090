@@ -44,6 +44,13 @@
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="form-group">
+                                                        <label class="label" for="canvas_api_key">Canvas API Token </label>
+                                                        {{ form.canvas_api_key }}
+                                                        <span class="text-danger">{{ form.errors.canvas_api_key }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
                                                         <label class="label" for="email">Email Address</label>
                                                         {{ form.email }}
                                                         <span class="text-danger">{{ form.errors.email }}</span>
