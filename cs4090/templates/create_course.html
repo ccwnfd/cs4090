@@ -1,0 +1,51 @@
+
+
+
+
+
+
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Event Dashboard{% endblock title %}
+
+{% block breadcrumb %}
+    <div>
+        <h1><i class="fa fa-dashboard"></i> Dashboard</h1>
+        <p>Event Dashboard</p>
+    </div>
+    <ul class="app-breadcrumb breadcrumb">
+        <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+        <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+    </ul>
+{% endblock breadcrumb %}
+
+{% block content %} <!-- This is where you make edits for this web page, changes outside of this block will mess with the side formats that match the rest of the website -->
+<h1>Create a New Course</h1>
+    <form method="POST">
+        {% csrf_token %}
+        
+        {{ form.name.label_tag }}<br>
+        {{ form.name }}<br><br>
+
+        <label>Select Start Time:</label><br>
+        {{ form.start_time }}<br><br>
+
+        <label>Select End Time:</label><br>
+        {{ form.end_time }}<br><br>
+
+        <label>Select Course Days:</label><br>
+        {{ form.days_of_week }}<br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+    
+    <br>
+    <a class="btn btn-primary" href="{% url 'course_list' %}">Back to Your Courses</a>
+{% endblock content %}
+
+{% block extrascripts %}
+    <script type="text/javascript" src="{% static 'js/plugins/jquery.dataTables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/dataTables.bootstrap.min.js' %}"></script>
+    <script type="text/javascript">$('#sampleTable').DataTable();</script>
+{% endblock extrascripts %}

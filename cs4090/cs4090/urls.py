@@ -25,4 +25,5 @@ urlpatterns = [
     path("", include("webApp.urls")),  # include urls from webApp urls here
     path("", include("accounts.urls")),  # include urls from account urls here
     path("", include("calendarapp.urls")),
+    path("", include("courseApp.urls")),
 ]

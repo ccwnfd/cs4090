@@ -69,6 +69,7 @@ class UserTestCase(TestCase):
             {
                 "first_name": "Test",
                 "last_name": "User",
+                "canvas_api_key": "none",
                 "email": "testuser3@example.com",
                 "password1": "Complex@Password123",
                 "password2": "Complexx@password123",
@@ -86,6 +87,7 @@ class UserTestCase(TestCase):
             {
                 "first_name": "Test",
                 "last_name": "User",
+                "canvas_api_key": "none",
                 "email": "testuser1@example.com",
                 "password1": "Complex@Password1234",
                 "password2": "Complex@Password1234",
