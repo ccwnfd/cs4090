@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from courseApp.models.models import Course  # Import Course model directly
 from courseApp.forms import CourseForm
@@ -32,3 +32,12 @@ def course_list(request):
         user=request.user
     )  # Get courses for the logged-in user
     return render(request, "course_list.html", {"courses": courses})
+
+
+@login_required
+def delete_course(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    if request.method == "POST":
+        course.delete()
+        return redirect("course_list")  # Redirect to the course list after deletion
+    return render(request, "confirm_delete.html", {"course": course})
