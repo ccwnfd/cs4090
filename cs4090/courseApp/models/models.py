@@ -20,6 +20,10 @@ class Course(models.Model):
     start_time = models.TimeField(help_text="Course start time")
     end_time = models.TimeField(help_text="Course end time")
 
+    course_created_date = models.DateTimeField(
+        auto_now_add=True, help_text="Course created date and time"
+    )
+
     DAYS_OF_WEEK_CHOICES = [
         ("Mon", "Monday"),
         ("Tue", "Tuesday"),
@@ -36,4 +40,4 @@ class Course(models.Model):
     )
 
     def __str__(self):
-        return f"{self.name} ({self.days_of_week}) {self.start_time} - {self.end_time}"
+        return f"{self.name} {self.course_created_date} ({self.days_of_week}) {self.start_time} - {self.end_time}"
