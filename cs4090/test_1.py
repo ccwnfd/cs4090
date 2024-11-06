@@ -148,5 +148,3 @@ class UserTestCase(TestCase):
         self.assertFalse(
             response.wsgi_request.user.is_authenticated, "User should not be logged in"
         )
-
-    
