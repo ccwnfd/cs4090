@@ -22,7 +22,9 @@ from .views import DashboardView
 urlpatterns = [
     path("", DashboardView.as_view(), name="dashboard"),
     path("admin/", admin.site.urls),
-    path("", include("webApp.urls")),  # include urls from webApp urls here
+    path(
+        "webapp/", include(("webApp.urls", "webApp"), namespace="webApp")
+    ),  # Prefix for webApp
     path("", include("accounts.urls")),  # include urls from account urls here
     path("", include("calendarapp.urls")),
     path("", include("courseApp.urls")),

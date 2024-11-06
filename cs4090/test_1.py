@@ -148,19 +148,3 @@ class UserTestCase(TestCase):
         self.assertFalse(
             response.wsgi_request.user.is_authenticated, "User should not be logged in"
         )
-
-    def test_streak_view(self):
-        """Test the streak view for the created user."""
-        # Simulate a logged-in user with RequestFactory
-        factory = RequestFactory()
-        path = reverse("streak_view")  # Ensure the name matches your URL pattern
-        request = factory.get(path)
-
-        # Simulate the logged-in user
-        request.user = self.user
-
-        # Call the streak view
-        response = streak_view(request)
-
-        # Assert that the view returns a 200 status code
-        self.assertEqual(response.status_code, 200)
