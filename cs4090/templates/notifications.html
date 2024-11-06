@@ -1,0 +1,21 @@
+<!-- /templates/notifications.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Notifications</title>
+</head>
+<body>
+    <h1>Notifications</h1>
+    <a href="{% url 'notifications:all' %}">All Notifications</a>
+    <ul>
+        {% for notification in notifications %}
+            <li class="{% if not notification.is_read %}unread{% endif %}">{{ notification.message }} - {{ notification.created_at }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+{% endblock %}

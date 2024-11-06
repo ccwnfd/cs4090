@@ -26,4 +26,7 @@ urlpatterns = [
     path("", include("accounts.urls")),  # include urls from account urls here
     path("", include("calendarapp.urls")),
     path("", include("courseApp.urls")),
+    path(
+        "notifications/", include("notifications.urls", namespace="notifications")
+    ),  # include urls from notification urls
 ]

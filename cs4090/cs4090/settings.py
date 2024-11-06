@@ -36,8 +36,8 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "umsystem.edu"  # Change to your email provider
 EMAIL_PORT = 587  # Typically 587 for TLS
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "ccwnfd@umsystem.edu"
-EMAIL_HOST_PASSWORD = "fake@123"
+EMAIL_HOST_USER = ""
+EMAIL_HOST_PASSWORD = ""
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 ADMINS = [("Admin Name", "ccwnfd@umsystem.edu")]  # Set your admin email
 
@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     "accounts.apps.AccountsConfig",
     "webApp.apps.WebappConfig",
     "courseApp.apps.WebappConfig",
+    "notifications.apps.NotificationsConfig",
 ]
 
 MIDDLEWARE = [
