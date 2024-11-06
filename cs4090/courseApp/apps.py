@@ -1,6 +1,9 @@
 from django.apps import AppConfig
 
 
-class WebappConfig(AppConfig):
+class CourseAppConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "courseApp"
+
+    def ready(self):
+        import courseApp.signals

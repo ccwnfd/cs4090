@@ -39,12 +39,15 @@ def next_month(d):
     return month
 
 
-class CalendarView(LoginRequiredMixin, generic.ListView):
+class CalendarView(
+    LoginRequiredMixin, generic.ListView
+):  # does not run when you switch months
     login_url = "accounts:signin"
     model = Event
     template_name = "calendar.html"
 
     def get_context_data(self, **kwargs):
+        print("i ran")
         context = super().get_context_data(**kwargs)
         d = get_date(self.request.GET.get("month", None))
         cal = Calendar(d.year, d.month)
@@ -111,7 +114,9 @@ class EventMemberDeleteView(generic.DeleteView):
     success_url = reverse_lazy("calendarapp:calendar")
 
 
-class CalendarViewNew(LoginRequiredMixin, generic.View):
+class CalendarViewNew(
+    LoginRequiredMixin, generic.View
+):  # does not seem to run every time you switch calendar month
     login_url = "accounts:signin"
     template_name = "calendarapp/calendar.html"
     form_class = EventForm

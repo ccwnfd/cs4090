@@ -33,6 +33,7 @@ class Calendar(HTMLCalendar):
         events = Event.objects.filter(
             start_time__year=self.year, start_time__month=self.month
         )
+        print("ran")
         cal = '<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'  # noqa
         cal += f"{self.formatmonthname(self.year, self.month, withyear=withyear)}\n"  # noqa
         cal += f"{self.formatweekheader()}\n"

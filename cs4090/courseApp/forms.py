@@ -2,6 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from .models import Course
 from accounts.models.user import User
+from django.utils import timezone
 
 DAYS_OF_WEEK = [
     ("Mon", "Monday"),
