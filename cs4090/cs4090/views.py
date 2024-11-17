@@ -1,11 +1,50 @@
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
 
 from calendarapp.models import Event
-from django.utils import timezone
 from datetime import datetime, timedelta
 import requests
+import json
+import sqlite3
+
+
+# Import event function
+def import_events_from_json():
+    # FIXME: create SQL query to grab all events
+    events = json.loads("")
+    return json.dumps(events)
+
+
+# create function to respond to export javascript query
+@csrf_exempt
+def import_events(request):
+    if request.method == "POST":
+        json_data = import_events_from_json()
+        return JsonResponse({"success": "Event data successfully imported"}, status=200)
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+# Export event function
+def export_events_to_json():
+    # FIXME: create SQL query to grab all events
+    events = [
+        {"id": 1, "name": "Event 1", "date": "2024-11-17"},
+        {"id": 2, "name": "Event 2", "date": "2024-11-18"},
+    ]
+    return json.dumps(events)
+
+
+# create function to respond to export javascript query
+@csrf_exempt
+def export_events(request):
+    if request.method == "GET":
+        json_data = export_events_to_json()
+        return JsonResponse(json.loads(json_data), safe=False)
+    return JsonResponse({"error": "Invalid request"}, status=400)
 
 
 def get_streak(user):
