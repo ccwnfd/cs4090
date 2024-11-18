@@ -4,6 +4,9 @@ from django.utils import timezone
 from webApp.views import streak_view
 from accounts.models.user import User
 
+from calendarapp.models import Event
+from calendarapp.forms import EventForm
+
 
 class UserTestCase(TestCase):
     def setUp(self):
@@ -148,3 +151,28 @@ class UserTestCase(TestCase):
         self.assertFalse(
             response.wsgi_request.user.is_authenticated, "User should not be logged in"
         )
+
+    def test_event_form_valid(self):  # Makes sure events can still be added.
+        """Test that the EventForm is valid and creates an Event."""
+        # Data to submit through the form
+        form_data = {
+            "title": "Test Event",
+            "description": "This is a test event.",
+            "start_time": "2024-11-04T15:30",
+            "end_time": "2024-11-04T16:30",
+        }
+
+        form = EventForm(data=form_data)
+        self.assertTrue(form.is_valid())  # Check if form is valid
+
+        # Save the form and check if an event was created
+        event = form.save(commit=False)
+        event.user = self.user  # Assign the user to the event
+        event.save()
+
+        # Ensure the event was saved to the database
+        self.assertEqual(Event.objects.count(), 1)
+        event_in_db = Event.objects.first()
+        self.assertEqual(event_in_db.title, "Test Event")
+        self.assertEqual(event_in_db.description, "This is a test event.")
+        self.assertEqual(event_in_db.user, self.user)
