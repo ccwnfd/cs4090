@@ -13,7 +13,7 @@ import sqlite3
 
 
 # Import event function
-def import_events_from_json(user_profile, filename):
+def import_events_from_json(user_id, filename):
 
     # Parse the incoming JSON data
     try:
@@ -32,10 +32,10 @@ def import_events_from_json(user_profile, filename):
         try:
             # Insert or replace event data
             cur.execute("""
-                INSERT OR REPLACE INTO event (user, title, description, start_time, end_time)
+                INSERT OR REPLACE INTO calendarapp_event (user_id, title, description, start_time, end_time)
                 VALUES (?, ?, ?, ?, ?)
             """, (
-                user_profile,  
+                user_id,  
                 event['title'], 
                 event['description'], 
                 event['start_time'], 
@@ -63,7 +63,7 @@ def import_events(request):
 
 # Export event function
 
-def export_events_to_json(user_profile):
+def export_events_to_json(user_id):
 
     # Connect to the database
     con = sqlite3.connect("db.sqlite3")
@@ -72,9 +72,9 @@ def export_events_to_json(user_profile):
     # Select events for the specific user from the event table
     cur.execute("""
         SELECT title, description, start_time, end_time
-        FROM event
-        WHERE user = ?
-    """, (user_profile,)) 
+        FROM calendarapp_event
+        WHERE user_id = ?
+    """, (user_id,)) 
 
     # Fetch all the events data for the user
     events_data = cur.fetchall()
