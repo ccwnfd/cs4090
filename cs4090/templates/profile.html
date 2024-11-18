@@ -113,14 +113,14 @@
         <br>
         <div class="col-md-12">
             <div class="form-group">
-                <button id="import_event" type="button" class="btn btn-primary">Import Events from JSON</button>
+                <button id="import_event_button" type="button" class="btn btn-primary">Import Events from JSON</button>
             </div>
         </div>
         <br>
         <br>
         <div class="col-md-12">
             <div class="form-group">
-                <button id="export_event" type="button" class="btn btn-primary">Export Events to JSON</button>
+                <button id="export_event_button" type="button" class="btn btn-primary">Export Events to JSON</button>
             </div>
         </div>
     </form>
@@ -128,12 +128,11 @@
     <!-- Add script listeners for each button--> 
     <script>
         // Import event
-        document.getElementById('import_event').addEventListener('click', function() {
+        document.getElementById('import_event_button').addEventListener('click', function() {
             fetch('/import-events/', {
-                method: 'GET', // You can also use 'POST' if you need to send data
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}',  // Django CSRF token for security
                 }
             })
             .then(response => response.json())
@@ -154,17 +153,16 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('There was an error exporting the events.');
+                alert('There was an error importing the events.');
             });
         });
 
         // Export event
-        document.getElementById('export_event').addEventListener('click', function() {
+        document.getElementById('export_event_button').addEventListener('click', function() {
             fetch('/export-events/', {
-                method: 'GET', // You can also use 'POST' if you need to send data
+                method: 'GET', 
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}',  // Django CSRF token for security
                 }
             })
             .then(response => response.json())

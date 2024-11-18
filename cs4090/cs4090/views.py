@@ -13,29 +13,90 @@ import sqlite3
 
 
 # Import event function
-def import_events_from_json():
-    # FIXME: create SQL query to grab all events
-    events = json.loads("")
-    return json.dumps(events)
+def import_events_from_json(user_profile, filename):
+
+    # Parse the incoming JSON data
+    try:
+        with open(filename, "r") as json_data:
+            events = json.loads(json_data)
+    except json.JSONDecodeError as e:
+        print(f"Error decoding JSON: {e}")
+        return {"error": "Invalid JSON data"}
+
+    # Connect to the database
+    con = sqlite3.connect("db.sqlite3")
+    cur = con.cursor()
+
+    # Insert events into the event table
+    for event in events:
+        try:
+            # Insert or replace event data
+            cur.execute("""
+                INSERT OR REPLACE INTO event (user, title, description, start_time, end_time)
+                VALUES (?, ?, ?, ?, ?)
+            """, (
+                user_profile,  
+                event['title'], 
+                event['description'], 
+                event['start_time'], 
+                event['end_time']  
+            ))
+        except sqlite3.Error as e:
+            print(f"Error inserting event: {e}")
+            continue 
+
+    # Commit the changes and close the connection
+    con.commit()
+    con.close()
+
+    return {"success": "Events imported successfully"}
 
 
-# create function to respond to export javascript query
+# create function to respond to import javascript query
 @csrf_exempt
 def import_events(request):
-    if request.method == "POST":
-        json_data = import_events_from_json()
+    if request.method == "GET":
+        import_events_from_json()
         return JsonResponse({"success": "Event data successfully imported"}, status=200)
     return JsonResponse({"error": "Invalid request"}, status=400)
 
 
 # Export event function
-def export_events_to_json():
-    # FIXME: create SQL query to grab all events
+
+def export_events_to_json(user_profile):
+
+    # Connect to the database
+    con = sqlite3.connect("db.sqlite3")
+    cur = con.cursor()
+
+    # Select events for the specific user from the event table
+    cur.execute("""
+        SELECT title, description, start_time, end_time
+        FROM event
+        WHERE user = ?
+    """, (user_profile,)) 
+
+    # Fetch all the events data for the user
+    events_data = cur.fetchall()
+
+    # Convert the events data into a list of dictionaries
     events = [
-        {"id": 1, "name": "Event 1", "date": "2024-11-17"},
-        {"id": 2, "name": "Event 2", "date": "2024-11-18"},
+        {
+            "title": event[0],
+            "description": event[1],
+            "start_time": event[2],
+            "end_time": event[3]
+        }
+        for event in events_data
     ]
-    return json.dumps(events)
+
+    # Convert the list of events to JSON with indentation for readability
+    events_json = json.dumps(events, indent=2)
+
+    # Close the connection
+    con.close()
+
+    return events_json
 
 
 # create function to respond to export javascript query
@@ -43,7 +104,7 @@ def export_events_to_json():
 def export_events(request):
     if request.method == "GET":
         json_data = export_events_to_json()
-        return JsonResponse(json.loads(json_data), safe=False)
+        return JsonResponse(json.loads(json_data), safe=False, status=200)
     return JsonResponse({"error": "Invalid request"}, status=400)
 
 
