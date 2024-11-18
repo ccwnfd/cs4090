@@ -31,19 +31,22 @@ def import_events_from_json(user_id, filename):
     for event in events:
         try:
             # Insert or replace event data
-            cur.execute("""
+            cur.execute(
+                """
                 INSERT OR REPLACE INTO calendarapp_event (user_id, title, description, start_time, end_time)
                 VALUES (?, ?, ?, ?, ?)
-            """, (
-                user_id,  
-                event['title'], 
-                event['description'], 
-                event['start_time'], 
-                event['end_time']  
-            ))
+            """,
+                (
+                    user_id,
+                    event["title"],
+                    event["description"],
+                    event["start_time"],
+                    event["end_time"],
+                ),
+            )
         except sqlite3.Error as e:
             print(f"Error inserting event: {e}")
-            continue 
+            continue
 
     # Commit the changes and close the connection
     con.commit()
@@ -63,6 +66,7 @@ def import_events(request):
 
 # Export event function
 
+
 def export_events_to_json(user_id):
 
     # Connect to the database
@@ -70,11 +74,14 @@ def export_events_to_json(user_id):
     cur = con.cursor()
 
     # Select events for the specific user from the event table
-    cur.execute("""
+    cur.execute(
+        """
         SELECT title, description, start_time, end_time
         FROM calendarapp_event
         WHERE user_id = ?
-    """, (user_id,)) 
+    """,
+        (user_id,),
+    )
 
     # Fetch all the events data for the user
     events_data = cur.fetchall()
@@ -85,7 +92,7 @@ def export_events_to_json(user_id):
             "title": event[0],
             "description": event[1],
             "start_time": event[2],
-            "end_time": event[3]
+            "end_time": event[3],
         }
         for event in events_data
     ]
