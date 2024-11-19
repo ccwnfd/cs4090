@@ -23,34 +23,31 @@ def import_events_from_json(user_id, filename):
         print(f"Error decoding JSON: {e}")
         return {"error": "Invalid JSON data"}
 
-    # Connect to the database
-    con = sqlite3.connect("db.sqlite3")
-    cur = con.cursor()
-
     # Insert events into the event table
     for event in events:
         try:
             # Insert or replace event data
-            cur.execute(
-                """
-                INSERT OR REPLACE INTO calendarapp_event (user_id, title, description, start_time, end_time)
-                VALUES (?, ?, ?, ?, ?)
-            """,
-                (
-                    user_id,
-                    event["title"],
-                    event["description"],
-                    event["start_time"],
-                    event["end_time"],
-                ),
-            )
-        except sqlite3.Error as e:
+            existing_event = Event.objects.filter(
+                user=user_id,
+                title=event["title"],
+                description=event["description"],
+                start_time=event["start_time"],
+                end_time=event["end_time"],
+            ).first()
+
+            if not existing_event:
+                new_event = Event(
+                    user=user_id,
+                    title=event["title"],
+                    description=event["description"],
+                    start_time=event["start_time"],
+                    end_time=event["end_time"],
+                )
+                new_event.save()
+
+        except Exception as e:
             print(f"Error inserting event: {e}")
             continue
-
-    # Commit the changes and close the connection
-    con.commit()
-    con.close()
 
     return {"success": "Events imported successfully"}
 
@@ -65,26 +62,12 @@ def import_events(request):
 
 
 # Export event function
-
-
 def export_events_to_json(user_id):
 
-    # Connect to the database
-    con = sqlite3.connect("db.sqlite3")
-    cur = con.cursor()
-
     # Select events for the specific user from the event table
-    cur.execute(
-        """
-        SELECT title, description, start_time, end_time
-        FROM calendarapp_event
-        WHERE user_id = ?
-    """,
-        (user_id,),
+    events_data = Event.objects.filter(
+        user=user_id,
     )
-
-    # Fetch all the events data for the user
-    events_data = cur.fetchall()
 
     # Convert the events data into a list of dictionaries
     events = [
@@ -99,9 +82,6 @@ def export_events_to_json(user_id):
 
     # Convert the list of events to JSON with indentation for readability
     events_json = json.dumps(events, indent=2)
-
-    # Close the connection
-    con.close()
 
     return events_json
 
