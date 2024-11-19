@@ -80,8 +80,6 @@
 
 <!-- Update api section-->
     
-    
-
     <form method="post">
         {% csrf_token %}
         
@@ -109,76 +107,6 @@
             <div class="alert {{ message.tags }}">{{ message }}</div>
         {% endfor %}
         {% endif %}
-
-        <!-- Add buttons for importing and exporting -->
-        <br>
-        <br>
-        <div class="col-md-12">
-            <div class="form-group">
-                <form id="import-form" enctype="multipart/form-data" method="POST">
-                    <label for="filename">Choose the import file:</label>
-                    <input type="file" id="filename" name="filename">
-                    <button id="import_event_button" type="submit" class="btn btn-primary">Import Events from JSON</button>
-                </form>
-            </div>
-        </div>
-        <br>
-        <br>
-        <div class="col-md-12">
-            <div class="form-group">
-                <button id="export_event_button" type="button" class="btn btn-primary">Export Events to JSON</button>
-            </div>
-        </div>
-    </form>
-
-    <!-- Add script listeners for each button--> 
-    <script>
-        // Import event
-        document.getElementById('import-form').addEventListener('submit', function(event) {
-            const importForm = document.getElementById('import-form'); 
-            const formData = new FormData(importForm); 
-            fetch('/import-events/', { 
-                method: 'POST', 
-                body: formData, 
-            }) 
-            .then(response => response.json()) 
-            .then(data => {}) 
-            .catch(error => { 
-                console.error('Error:', error);
-                alert('There was an error importing the events.'); 
-            }); 
-        });
-
-        // Export event
-        document.getElementById('export_event_button').addEventListener('click', function() {
-            fetch('/export-events/', {
-                method: 'GET', 
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Handle the response data and export it as a JSON file
-                const exportData = JSON.stringify(data, null, 2);  
-                
-                // Create a Blob from the JSON data
-                const blob = new Blob([exportData], { type: 'application/json' });
-                
-                // Create a download link
-                const exportLink = document.createElement('a');
-                exportLink.href = URL.createObjectURL(blob);
-                exportLink.download = 'export.json'; 
-                
-                // Click the link automatically
-                exportLink.click();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('There was an error exporting the events.');
-            });
-        });
-    </script>
     
 {% endblock content %}
 

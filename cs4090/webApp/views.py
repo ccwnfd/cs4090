@@ -38,6 +38,17 @@ def profile_view(request):
     return render(request, "profile.html", context)
 
 
+@login_required
+def settings_view(request):
+    user = request.user
+
+    context = {
+        user: user,
+    }
+
+    return render(request, "settings.html", context)
+
+
 def index(request):  # also should never be used anymore
     return render(request, "welcome.html")
 

@@ -1,0 +1,115 @@
+
+{% extends 'base/base.html' %} <!-- TODO Make this look a lot better lmao -->
+{% load static %}
+
+{% block title %}Event Dashboard{% endblock title %}
+
+{% block breadcrumb %}
+    <div>
+        <h1><i class="fa fa-dashboard"></i> Dashboard</h1>
+        <p>Event Dashboard</p>
+    </div>
+    <ul class="app-breadcrumb breadcrumb">
+        <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+        <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+    </ul>
+{% endblock breadcrumb %}
+
+{% block content %}  <!-- This is where you make edits for this web page, changes outside of this block will mess with the side formats that match the rest of the website -->
+<h1>Settings Page</h1>
+
+<br> <!-- Adds a newline for spacing -->
+<span class="basic-font">Import/Export Events</span>
+
+        <!-- Add buttons for importing and exporting -->
+        <br>
+        <br>
+        <div class="col-md-12">
+            <div class="form-group">
+                <form id="import-form" enctype="multipart/form-data" method="POST">
+                    {% csrf_token %}
+                    <label for="file">Choose the import file:</label>
+                    <input type="file" id="file" name="file">
+                    <button id="import_event_button" type="submit" class="btn btn-primary">Import Events from JSON</button>
+                </form>
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="col-md-12">
+            <div class="form-group">
+                <button id="export_event_button" type="button" class="btn btn-primary">Export Events to JSON</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Add script listeners for each button--> 
+    <script>
+        // Import event
+        document.getElementById('import-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+    
+            const importForm = document.getElementById('import-form'); 
+            const formData = new FormData(importForm);
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+            fetch('/import-events/', { 
+                method: 'POST', 
+                body: formData,
+                headers: {
+                    'X-CSRFToken': csrfToken, 
+                },
+            }) 
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(data.success || 'Events imported successfully!');
+            }) 
+            .catch(error => { 
+                console.error('Error:', error);
+                alert('There was an error importing the events.'); 
+            });
+        });
+
+        // Export event
+        document.getElementById('export_event_button').addEventListener('click', function() {
+            fetch('/export-events/', {
+                method: 'GET', 
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response data and export it as a JSON file
+                const exportData = JSON.stringify(data, null, 2);  
+                
+                // Create a Blob from the JSON data
+                const blob = new Blob([exportData], { type: 'application/json' });
+                
+                // Create a download link
+                const exportLink = document.createElement('a');
+                exportLink.href = URL.createObjectURL(blob);
+                exportLink.download = 'export.json'; 
+                
+                // Click the link automatically
+                exportLink.click();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error exporting the events.');
+            });
+        });
+    </script>
+    
+{% endblock content %}
+
+{% block extrascripts %}
+    <script type="text/javascript" src="{% static 'js/plugins/jquery.dataTables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/dataTables.bootstrap.min.js' %}"></script>
+    <script type="text/javascript">$('#sampleTable').DataTable();</script>
+{% endblock extrascripts %}

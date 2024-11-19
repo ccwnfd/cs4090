@@ -12,12 +12,11 @@ import json
 
 
 # Import event function
-def import_events_from_json(user_id, filename):
+def import_events_from_json(user_id, file):
 
     # Parse the incoming JSON data
     try:
-        with open(filename, "r") as json_data:
-            events = json.loads(json_data)
+        events = json.load(file)
     except json.JSONDecodeError as e:
         print(f"Error decoding JSON: {e}")
         return {"error": "Invalid JSON data"}
@@ -27,7 +26,7 @@ def import_events_from_json(user_id, filename):
         try:
             # Insert or replace event data
             existing_event = Event.objects.filter(
-                user=user_id,
+                user_id=user_id,
                 title=event["title"],
                 description=event["description"],
                 start_time=event["start_time"],
@@ -36,7 +35,7 @@ def import_events_from_json(user_id, filename):
 
             if not existing_event:
                 new_event = Event(
-                    user=user_id,
+                    user_id=user_id,
                     title=event["title"],
                     description=event["description"],
                     start_time=event["start_time"],
@@ -52,13 +51,11 @@ def import_events_from_json(user_id, filename):
 
 
 # create function to respond to import javascript query
-@csrf_exempt
 def import_events(request):
-    if request.method == "GET":
+    if request.method == "POST":
         user_id = request.user.id
-        print(request.FILES)
-        filename = request.FILES["filename"]
-        import_events_from_json(user_id=user_id, filename=filename)
+        file = request.FILES["file"]
+        import_events_from_json(user_id=user_id, file=file)
         return JsonResponse({"success": "Event data successfully imported"}, status=200)
     return JsonResponse({"error": "Invalid request"}, status=400)
 
