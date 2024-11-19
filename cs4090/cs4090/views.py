@@ -163,10 +163,10 @@ def adding_events_from_canvas(user):
                 if temp_description == None:
                     temp_description = "No description"
                 temp_start_time = datetime.fromisoformat(
-                    event["start_at"].replace("Z", "+00:00")
+                    event["start_at"].replace("Z", "+06:00")
                 )  # ensure proper time zone formats
                 temp_end_time = datetime.fromisoformat(
-                    event["end_at"].replace("Z", "+00:00")
+                    event["end_at"].replace("Z", "+06:00")
                 )
 
                 existing_event = Event.objects.filter(
