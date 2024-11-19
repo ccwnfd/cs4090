@@ -17,7 +17,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from .views import DashboardView
+from .views import DashboardView, export_events, import_events
 
 urlpatterns = [
     path("", DashboardView.as_view(), name="dashboard"),
@@ -25,7 +25,9 @@ urlpatterns = [
     path(
         "webapp/", include(("webApp.urls", "webApp"), namespace="webApp")
     ),  # Prefix for webApp
-    path("", include("accounts.urls")),  # include urls from account urls here
+    path("", include("accounts.urls")),
     path("", include("calendarapp.urls")),
     path("", include("courseApp.urls")),
+    path("import-events/", import_events, name="import_events"),
+    path("export-events/", export_events, name="export_events"),
 ]

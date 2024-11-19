@@ -80,15 +80,15 @@
 
 <!-- Update api section-->
     
-    
-
     <form method="post">
         {% csrf_token %}
         
         <!-- Display the form field for the API key manually -->
         <div class="form-group">
-            <!--<label for="id_api_key">New API Key</label>-->
-            {{ form.api_key }}  <!-- Manually render the form field -->
+            <form id="api-form">
+                <!--<label for="id_api_key">New API Key</label>-->
+                {{ form.api_key }}  <!-- Manually render the form field -->
+            </form>
         </div>
 
         <!-- Display errors for the API key field -->
@@ -107,9 +107,7 @@
             <div class="alert {{ message.tags }}">{{ message }}</div>
         {% endfor %}
         {% endif %}
-
-        <button type="submit" class="btn btn-primary">Save API Key</button>
-    </form>
+    
 {% endblock content %}
 
 {% block extrascripts %}

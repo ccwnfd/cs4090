@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import index, streak_view, profile_view
+from .views import index, streak_view, profile_view, settings_view
 
 urlpatterns = [  # standard method for keeping track of urls.
     path(
@@ -9,4 +9,5 @@ urlpatterns = [  # standard method for keeping track of urls.
     # path('calendar/', views.index1.as_view(), name='calendar'),
     path("streak/", streak_view, name="streak_view"),
     path("profile/", profile_view, name="profile"),
+    path("settings/", settings_view, name="settings"),
 ]
