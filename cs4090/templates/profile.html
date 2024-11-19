@@ -87,8 +87,10 @@
         
         <!-- Display the form field for the API key manually -->
         <div class="form-group">
-            <!--<label for="id_api_key">New API Key</label>-->
-            {{ form.api_key }}  <!-- Manually render the form field -->
+            <form id="api-form">
+                <!--<label for="id_api_key">New API Key</label>-->
+                {{ form.api_key }}  <!-- Manually render the form field -->
+            </form>
         </div>
 
         <!-- Display errors for the API key field -->
@@ -113,10 +115,10 @@
         <br>
         <div class="col-md-12">
             <div class="form-group">
-                <form id="export-form">
-                    <label for="filename">Choose the import filename:</label>
-                    <input type="text" id="filename" name="filename" placeholder="Enter filename">
-                    <button id="import_event_button" type="button" class="btn btn-primary">Import Events from JSON</button>
+                <form id="import-form" enctype="multipart/form-data" method="POST">
+                    <label for="filename">Choose the import file:</label>
+                    <input type="file" id="filename" name="filename">
+                    <button id="import_event_button" type="submit" class="btn btn-primary">Import Events from JSON</button>
                 </form>
             </div>
         </div>
@@ -132,22 +134,19 @@
     <!-- Add script listeners for each button--> 
     <script>
         // Import event
-        document.getElementById('import_event_button').addEventListener('click', function() {
-            const filename = document.getElementById('filename').value || 'export.json';
-            
-            fetch('/import-events/', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                filename: filename,
-            })
-            .then(response => response.json())
-            .then(data => {})
-            .catch(error => {
+        document.getElementById('import-form').addEventListener('submit', function(event) {
+            const importForm = document.getElementById('import-form'); 
+            const formData = new FormData(importForm); 
+            fetch('/import-events/', { 
+                method: 'POST', 
+                body: formData, 
+            }) 
+            .then(response => response.json()) 
+            .then(data => {}) 
+            .catch(error => { 
                 console.error('Error:', error);
-                alert('There was an error importing the events.');
-            });
+                alert('There was an error importing the events.'); 
+            }); 
         });
 
         // Export event

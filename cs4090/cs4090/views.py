@@ -56,7 +56,8 @@ def import_events_from_json(user_id, filename):
 def import_events(request):
     if request.method == "GET":
         user_id = request.user.id
-        filename = request.filename
+        print(request.FILES)
+        filename = request.FILES["filename"]
         import_events_from_json(user_id=user_id, filename=filename)
         return JsonResponse({"success": "Event data successfully imported"}, status=200)
     return JsonResponse({"error": "Invalid request"}, status=400)
