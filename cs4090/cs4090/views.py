@@ -9,7 +9,6 @@ from calendarapp.models import Event
 from datetime import datetime, timedelta
 import requests
 import json
-import sqlite3
 
 
 # Import event function
@@ -56,7 +55,9 @@ def import_events_from_json(user_id, filename):
 @csrf_exempt
 def import_events(request):
     if request.method == "GET":
-        import_events_from_json()
+        user_id = request.user.id
+        filename = request.filename
+        import_events_from_json(user_id=user_id, filename=filename)
         return JsonResponse({"success": "Event data successfully imported"}, status=200)
     return JsonResponse({"error": "Invalid request"}, status=400)
 
@@ -72,16 +73,16 @@ def export_events_to_json(user_id):
     # Convert the events data into a list of dictionaries
     events = [
         {
-            "title": event[0],
-            "description": event[1],
-            "start_time": event[2],
-            "end_time": event[3],
+            "title": event.title,
+            "description": event.description,
+            "start_time": event.start_time,
+            "end_time": event.end_time,
         }
         for event in events_data
     ]
 
     # Convert the list of events to JSON with indentation for readability
-    events_json = json.dumps(events, indent=2)
+    events_json = json.dumps(events, indent=2, default=str)
 
     return events_json
 
@@ -90,7 +91,8 @@ def export_events_to_json(user_id):
 @csrf_exempt
 def export_events(request):
     if request.method == "GET":
-        json_data = export_events_to_json()
+        user_id = request.user.id
+        json_data = export_events_to_json(user_id=user_id)
         return JsonResponse(json.loads(json_data), safe=False, status=200)
     return JsonResponse({"error": "Invalid request"}, status=400)
 

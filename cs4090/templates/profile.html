@@ -113,7 +113,11 @@
         <br>
         <div class="col-md-12">
             <div class="form-group">
-                <button id="import_event_button" type="button" class="btn btn-primary">Import Events from JSON</button>
+                <form id="export-form">
+                    <label for="filename">Choose the import filename:</label>
+                    <input type="text" id="filename" name="filename" placeholder="Enter filename">
+                    <button id="import_event_button" type="button" class="btn btn-primary">Import Events from JSON</button>
+                </form>
             </div>
         </div>
         <br>
@@ -129,28 +133,17 @@
     <script>
         // Import event
         document.getElementById('import_event_button').addEventListener('click', function() {
+            const filename = document.getElementById('filename').value || 'export.json';
+            
             fetch('/import-events/', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                }
+                },
+                filename: filename,
             })
             .then(response => response.json())
-            .then(data => {
-                // Handle the response data and export it as a JSON file
-                const exportData = JSON.stringify(data, null, 2);  
-                
-                // Create a Blob from the JSON data
-                const blob = new Blob([exportData], { type: 'application/json' });
-                
-                // Create a download link
-                const exportLink = document.createElement('a');
-                exportLink.href = URL.createObjectURL(blob);
-                exportLink.download = 'export.json'; 
-                
-                // Click the link automatically
-                exportLink.click();
-            })
+            .then(data => {})
             .catch(error => {
                 console.error('Error:', error);
                 alert('There was an error importing the events.');
