@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from .models import Course
 from accounts.models.user import User
 from django.utils import timezone
+from courseApp.models import Course  # for test 6 and 7
 
 DAYS_OF_WEEK = [
     ("Mon", "Monday"),
@@ -94,12 +95,18 @@ class CourseForm(forms.ModelForm):
         cleaned_data = super().clean()
         start_time = cleaned_data.get("start_time")
         end_time = cleaned_data.get("end_time")
+        temp_name = cleaned_data.get("name")
 
         # Validate that the end time is after the start time
         if start_time and end_time and end_time <= start_time:
             raise ValidationError("End time must be after start time.")
 
+        foundClass = Course.objects.filter(
+            name=temp_name
+        )  # Makes sure class names are not duplicates
+        if foundClass.exists():
+            raise ValidationError("Another class already has this name.")
+
         # Join selected days into a comma-separated string for storage
         cleaned_data["days_of_week"] = ",".join(cleaned_data.get("days_of_week", []))
-
         return cleaned_data

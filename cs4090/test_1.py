@@ -4,8 +4,11 @@ from django.utils import timezone
 from webApp.views import streak_view
 from accounts.models.user import User
 
-from calendarapp.models import Event
+from calendarapp.models import Event  # for test 5
 from calendarapp.forms import EventForm
+
+from courseApp.models import Course  # for test 6 and 7
+from courseApp.forms import CourseForm
 
 
 class UserTestCase(TestCase):
@@ -13,7 +16,11 @@ class UserTestCase(TestCase):
         """Set up a user and streak for testing."""
         # Create a user using the custom User model's manager
         self.user = User.objects.create_user(
-            email="testuser@example.com", password="Fake@1234", is_active=True
+            email="testuser@example.com",
+            password="Fake@1234",
+            first_name="Bob",
+            last_name="dan",
+            is_active=True,
         )
         # Set up streak-related fields on the user (assumed integrated into the User model)
         self.user.current_streak = 100
@@ -176,3 +183,258 @@ class UserTestCase(TestCase):
         self.assertEqual(event_in_db.title, "Test Event")
         self.assertEqual(event_in_db.description, "This is a test event.")
         self.assertEqual(event_in_db.user, self.user)
+
+    def test_course_form_valid(self):  # Makes sure classes can still be added.
+        """Test that the EventForm is valid and creates an Event."""
+        # Data to submit through the form
+        form_data = {
+            "name": "Driving class",
+            "start_time": "07:00",
+            "end_time": "08:00",
+            "days_of_week": ["Mon", "Wed", "Fri"],
+        }
+
+        form = CourseForm(data=form_data)
+        self.assertTrue(form.is_valid())  # Check if form is valid
+
+        # Save the form and check if an event was created
+        course = form.save(commit=False)
+        course.user = self.user  # Assign the user to the event
+        course.save()
+
+        # Ensure the event was saved to the database
+        self.assertEqual(Course.objects.count(), 1)
+        course_in_db = Course.objects.first()
+        self.assertEqual(course_in_db.name, "Driving class")
+        self.assertEqual(course_in_db.user, self.user)
+        self.assertEqual(course_in_db.days_of_week, "Mon,Wed,Fri")
+
+    def test_course_form_invalid_time(
+        self,
+    ):  # Makes sure classes with bad times are not added
+        """Test that the CourseForm doesnt make bad courses"""
+        # Data to submit through the form
+        form_data = {
+            "name": "Driving class2",
+            "start_time": "07:00",
+            "end_time": "06:00",
+            "days_of_week": ["Mon", "Wed", "Fri"],
+        }
+
+        form = CourseForm(data=form_data)
+        self.assertFalse(form.is_valid())  # Check if form is valid
+
+    def test_course_form_invalid_name(self):  # Makes sure classes have unique names
+        """Test that the EventForm is valid and creates an Event."""
+        # Data to submit through the form
+        form_data = {
+            "name": "Driving class",
+            "start_time": "07:00",
+            "end_time": "08:00",
+            "days_of_week": ["Mon", "Wed", "Fri"],
+        }
+
+        form = CourseForm(data=form_data)
+        self.assertTrue(form.is_valid())  # Check if form is valid
+
+        # Save the form and check if an event was created
+        course = form.save(commit=False)
+        course.user = self.user  # Assign the user to the event
+        course.save()
+
+        # Ensure the event was saved to the database
+        self.assertEqual(Course.objects.count(), 1)
+        course_in_db = Course.objects.first()
+        self.assertEqual(course_in_db.name, "Driving class")
+        self.assertEqual(course_in_db.user, self.user)
+        self.assertEqual(course_in_db.days_of_week, "Mon,Wed,Fri")
+
+        form_data = {
+            "name": "Driving class",
+            "start_time": "08:00",
+            "end_time": "09:00",
+            "days_of_week": ["Mon", "Wed"],
+        }
+
+        form = CourseForm(data=form_data)
+        self.assertFalse(form.is_valid())  # Check if form is valid
+
+
+class PageAccessTest(TestCase):  # these cases makes sure pages are viewable
+    def setUp(self):
+        # Create a test user
+        self.user = User.objects.create_user(
+            email="testuser@example.com",
+            password="Fake@1234",
+            first_name="Bob",
+            last_name="dan",
+            is_active=True,
+        )
+
+        self.classes_url = reverse("course_list")
+        self.create_course_url = reverse("create_course")
+        self.dashboard_url = reverse("dashboard")
+        self.calendar_url = reverse("calendarapp:calendar")
+        self.all_events_url = reverse("calendarapp:all_events")
+        self.running_events_url = reverse("calendarapp:running_events")
+        self.profile_url = reverse("webApp:profile")
+        self.settings_url = reverse("webApp:settings")
+
+    def test_classes_list_page_access_for_logged_in_user(self):
+        # Log in the user
+        self.client.login(email="testuser@example.com", password="Fake@1234")
+
+        # Access the /classes/ page
+        response = self.client.get(self.classes_url)
+
+        # Check that the logged-in user can access the page
+        self.assertEqual(response.status_code, 200)
+
+    def test_classes_list_page_access_for_non_logged_in_user(self):
+        # Access the /classes/ page without logging in
+        response = self.client.get(self.classes_url)
+
+        # Check that the non-logged-in user is redirected
+        self.assertEqual(response.status_code, 302)  # Redirect status code
+        self.assertNotEqual(response.status_code, 200)
+        # self.assertRedirects(response, f"{reverse('accounts:signin')}?next={self.classes_url}") # currently page not found issue happens no redirect
+
+    def test_classes_create_page_access_for_logged_in_user(
+        self,
+    ):  # tests if you can view create couses pages
+        # Log in the user
+        self.client.login(email="testuser@example.com", password="Fake@1234")
+
+        # Access the /classes/ page
+        response = self.client.get(self.create_course_url)
+
+        # Check that the logged-in user can access the page
+        self.assertEqual(response.status_code, 200)
+
+    def test_classes_create_page_access_for_non_logged_in_user(self):
+        response = self.client.get(self.create_course_url)
+
+        # Check that the non-logged-in user is redirected
+        self.assertEqual(response.status_code, 302)  # Redirect status code
+        self.assertNotEqual(response.status_code, 200)
+        # self.assertRedirects(response, f"{reverse('accounts:signin')}?next={self.classes_url}") # currently page not found issue happens no redirect
+
+    def test_dashboard_user_logged_in(
+        self,
+    ):  # tests if you can view create couses pages
+        # Log in the user
+        self.client.login(email="testuser@example.com", password="Fake@1234")
+
+        # Access the /classes/ page
+        response = self.client.get(self.dashboard_url)
+
+        # Check that the logged-in user can access the page
+        self.assertEqual(response.status_code, 200)
+
+    def test_dashboard_user_logged_out(self):
+        response = self.client.get(self.dashboard_url)
+
+        # Check that the non-logged-in user is redirected
+        self.assertEqual(response.status_code, 302)  # Redirect status code
+        self.assertNotEqual(response.status_code, 200)
+        # self.assertRedirects(response, f"{reverse('accounts:signin')}?next={self.classes_url}") # currently page not found issue happens no redirect
+
+    def test_calendar_user_logged_in(self):
+        # Log in the user
+        self.client.login(email="testuser@example.com", password="Fake@1234")
+
+        # Access the /classes/ page
+        response = self.client.get(self.calendar_url)
+
+        # Check that the logged-in user can access the page
+        self.assertEqual(response.status_code, 200)
+
+    def test_calendar_user_logged_out(self):
+        response = self.client.get(self.calendar_url)
+
+        # Check that the non-logged-in user is redirected
+        self.assertEqual(response.status_code, 302)  # Redirect status code
+        self.assertNotEqual(response.status_code, 200)
+        # self.assertRedirects(response, f"{reverse('accounts:signin')}?next={self.classes_url}") # currently page not found issue happens no redirect
+
+    def test_event_list_user_logged_in(self):
+        # Log in the user
+        self.client.login(email="testuser@example.com", password="Fake@1234")
+
+        # Access the /classes/ page
+        response = self.client.get(self.all_events_url)
+
+        # Check that the logged-in user can access the page
+        self.assertEqual(response.status_code, 200)
+
+        # Access the /classes/ page
+        response = self.client.get(self.running_events_url)
+
+        # Check that the logged-in user can access the page
+        self.assertEqual(response.status_code, 200)
+
+    def test_event_list_user_logged_out(self):
+        response = self.client.get(self.all_events_url)
+
+        # Check that the non-logged-in user is redirected
+        self.assertEqual(response.status_code, 302)  # Redirect status code
+        self.assertNotEqual(response.status_code, 200)
+        # self.assertRedirects(response, f"{reverse('accounts:signin')}?next={self.classes_url}") # currently page not found issue happens no redirect
+
+        response = self.client.get(self.running_events_url)
+
+        # Check that the non-logged-in user is redirected
+        self.assertEqual(response.status_code, 302)  # Redirect status code
+        self.assertNotEqual(response.status_code, 200)
+        # self.assertRedirects(response, f"{reverse('accounts:signin')}?next={self.classes_url}") # currently page not found issue happens no redirect
+
+    def test_profile_user_logged_in(self):
+        # Log in the user
+        self.client.login(email="testuser@example.com", password="Fake@1234")
+
+        # Access the /classes/ page
+        response = self.client.get(self.profile_url)
+
+        # Check that the logged-in user can access the page
+        self.assertEqual(response.status_code, 200)
+
+    def test_profile_user_logged_out(self):
+        response = self.client.get(self.profile_url)
+
+        # Check that the non-logged-in user is redirected
+        self.assertEqual(response.status_code, 302)  # Redirect status code
+        self.assertNotEqual(response.status_code, 200)
+        # self.assertRedirects(response, f"{reverse('accounts:signin')}?next={self.classes_url}") # currently page not found issue happens no redirect
+
+    def test_event_list_user_logged_out(self):
+        response = self.client.get(self.all_events_url)
+
+        # Check that the non-logged-in user is redirected
+        self.assertEqual(response.status_code, 302)  # Redirect status code
+        self.assertNotEqual(response.status_code, 200)
+        # self.assertRedirects(response, f"{reverse('accounts:signin')}?next={self.classes_url}") # currently page not found issue happens no redirect
+
+        response = self.client.get(self.running_events_url)
+
+        # Check that the non-logged-in user is redirected
+        self.assertEqual(response.status_code, 302)  # Redirect status code
+        self.assertNotEqual(response.status_code, 200)
+        # self.assertRedirects(response, f"{reverse('accounts:signin')}?next={self.classes_url}") # currently page not found issue happens no redirect
+
+    def test_settings_user_logged_in(self):
+        # Log in the user
+        self.client.login(email="testuser@example.com", password="Fake@1234")
+
+        # Access the /classes/ page
+        response = self.client.get(self.settings_url)
+
+        # Check that the logged-in user can access the page
+        self.assertEqual(response.status_code, 200)
+
+    def test_settings_user_logged_out(self):
+        response = self.client.get(self.settings_url)
+
+        # Check that the non-logged-in user is redirected
+        self.assertEqual(response.status_code, 302)  # Redirect status code
+        self.assertNotEqual(response.status_code, 200)
+        # self.assertRedirects(response, f"{reverse('accounts:signin')}?next={self.classes_url}") # currently page not found issue happens no redirect
