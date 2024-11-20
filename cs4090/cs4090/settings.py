@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     "accounts.apps.AccountsConfig",
     "webApp.apps.WebappConfig",
     "courseApp.apps.CourseAppConfig",
+    "django_extensions",
 ]
 
 MIDDLEWARE = [

@@ -53,6 +53,7 @@ def index(request):  # also should never be used anymore
     return render(request, "welcome.html")
 
 
+@login_required
 def streak_view(
     request,
 ):  # this page can be deleted as long as no issues arise from its deletion
